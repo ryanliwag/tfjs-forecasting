@@ -1,0 +1,133 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<head>
+    <title>Tensorflow.js Demo Forecasting</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    </link>
+</head>
+
+<style>
+    .inputfile {
+        width: 1vw;
+        height: 0.6vh;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+</style>
+
+<header class="header">
+    <h1 style="text-align: center">Tensorflow.js Demo Forecasting</h1>
+</header>
+
+<body>
+    <div class="container" style="padding-left: 6%; padding-right: 6%; padding-top: 2%">
+        <h2 class="ui header">Import Dataset</h2>
+        <span>Upload your CSV that contains the row that you want to forecast. CSV should contain atleast two columns
+            representing the Timestamp and the univariate data that needs to be forecasted.
+            After Uploading select the respective columns from the dropdown and then click extract. This should result
+            in your data being displayed in a graph.
+        </span>
+        <div class="ui clearing divider"></div>
+        <div class="ui grid">
+            <div class="four wide column">
+                <form class="ui form">
+                    <div class="field">
+                        <input type="file" id="uploaded-file" class="inputfile" />
+                        <label for="uploaded-file" class="ui submit button">
+                            <i class="ui upload icon"></i>
+                            Upload
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Select Column to forecast</label>
+                        <div class="ui form">
+                            <div class="field">
+                                <select id="select-data">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Select Column of Date</label>
+                        <div class="ui form">
+                            <div class="field">
+                                <select id="select-time">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <button class="ui blue button" id="extract-data">Extract</button>
+            </div>
+            <div class="twelve wide column">
+                <div id="graph-extracted"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-left: 6%; padding-right: 6%; padding-top: 2%">
+        <h2 class="ui header">Training & Validation</h2>
+        <span>Here we will be training a LSTM Neural Network model on your dataset.
+            A deep down read on lstm as an approach to forecasting can be found <a href="https://blog.usejournal.com/stock-market-prediction-by-recurrent-neural-network-on-lstm-model-56de700bff68">here</a>.
+            You can use the default parameters set and just start training. Two graphs should inititate to help yo monitor model loss and mape.
+        </span>
+        <div class="ui clearing divider"></div>
+        <div class="ui grid">
+            <div class="four wide column">
+                <form class="ui form">
+                    <div class="field">
+                        <label>Number of Days to predict</label>
+                        <input type="text" id="predict-steps" value=7>
+                    </div>
+                    <div class="field">
+                        <label>Epochs</label>
+                        <input type="text" id="epochs" value=50>
+                    </div>
+                    <div class="field">
+                        <label>Batch Size</label>
+                        <input type="text" id="batch-size" value=32>
+                    </div>
+                    <div class="field">
+                        <label>Validation size</label>
+                        <input type="text" id="val-size" value=0.05>
+                    </div>
+                </form>
+                <br>
+                <button class="ui blue button" id="train">Train</button>
+            </div>
+            <div class="twelve wide column">
+                <h4 class="ui header">Loss Graph</h4>
+                <div id="graph-loss"></div>
+                <h4 class="ui header">MAPE Graph</h4>
+                <div id="graph-mape"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-left: 6%; padding-right: 6%; padding-top: 2%">
+        <h2 class="ui header">Forecast</h2>
+        <span>Your Model is Trained and Ready, simply click forecast to see your models forecasted results. </span>
+        <br>
+        Note: Your forecast horizon will only go as far as the number of days you trained the model to forecast.
+            <div class="ui clearing divider"></div>
+            <button class="ui blue button" id="forecast">Forecast</button>
+        <div class="ui clearing divider"></div>
+        <div id="graph-forecast"></div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.0.0/papaparse.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="index.js"></script>

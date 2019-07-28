@@ -1,0 +1,45 @@
+{
+  "name": "forecasting_browser",
+  "version": "1.0.0",
+  "description": "browser based forecasting",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "info": "echo 'npm as a build tool'",
+    "prep": "mkdir dist && npm install budo -g",
+    "start": "budo index.js:dist/bundle.js --live --host localhost"
+  },
+  "keywords": [
+    "forecasting",
+    "tensorflow",
+    "machinelearning"
+  ],
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "@babel/preset-env"
+          ],
+          "plugins": [
+            "syntax-async-functions",
+            "transform-regenerator"
+          ]
+        }
+      ]
+    ]
+  },
+  "author": "Ryan Joshua H. Liwag",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^1.2.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^10.0.0",
+    "budo": "^11.6.2",
+    "clang-format": "^1.2.4",
+    "jquery": "^3.4.1"
+  }
+  
+}
