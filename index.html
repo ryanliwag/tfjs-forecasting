@@ -24,7 +24,7 @@
 </style>
 
 <header class="header">
-    <h1 style="text-align: center">Tensorflow.js Demo Forecasting</h1>
+    <h1 style="text-align: center">Tensorflow.js Time Series Forecasting</h1>
 </header>
 
 <body>
@@ -40,11 +40,41 @@
             <div class="four wide column">
                 <form class="ui form">
                     <div class="field">
-                        <input type="file" id="uploaded-file" class="inputfile" />
-                        <label for="uploaded-file" class="ui submit button">
-                            <i class="ui upload icon"></i>
-                            Upload
-                        </label>
+                            <div class="two fields">
+
+                        <div class="field">
+                                <input type="file" id="uploaded-file" class="inputfile" />
+                                <label for="uploaded-file" class="ui submit button">
+                                    <i class="ui upload icon"></i>
+                                    Upload
+                                </label>
+                              </div>
+                              <div class="field">
+                                    <div class="ui labeled icon dropdown button" id="drop">
+                                            <i class="archive icon"></i>
+                                            <span class="text">Use Sample Data</span>
+                                            <div class="menu">
+                                                
+                                              <div class="header">
+                                                Select a dataset
+                                              </div>
+                                              <div class="divider"></div>
+                                              <div class="item" value="daily-btc">
+                                                <span class="description">Daily Volume</span>
+                                                <span class="text" id="btc">Bitcoin</span>
+                                              </div>
+                                              <div class="item" >
+                                                <span class="description"></span>
+                                                <span class="text">Temperature</span>
+                                              </div>
+                                              <div class="item">
+                                                <span class="description"></span>
+                                                <span class="text">Store Demand</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                  </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label>Select Column to forecast</label>

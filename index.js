@@ -1,6 +1,10 @@
 $('.ui.checkbox')
   .checkbox();
 
+$('.ui.dropdown')
+  .dropdown()
+;
+
 var app = {}
 
 // ********************************** Import Data **********************************
@@ -15,6 +19,7 @@ const handleFileSelect = evt => {
   $('#extract-data').removeClass('disabled');
 
   let file = evt.target.files[0];
+  console.log(file)
   Papa.parse(file, {
     header: true,
     skipEmptyLines: true,
@@ -52,7 +57,6 @@ const forwardFill = arr => {
       break;
     }
   }
-
   for (var i = 0; i < arr.length; i++) {
     if (arr[i] == null) {
       arr[i] = arr[lastindex]
@@ -61,20 +65,59 @@ const forwardFill = arr => {
   }
 };
 
+$('#drop').dropdown('setting', 'onChange', function(val){
+  
+  console.log(val)
+  let parsed = $('<div/>').append(val)
+  console.log(parsed)
+  console.log($(parsed).find(".text").text())
+  importSampleData($(parsed).find(".text").text())
+});
+
+const importSampleData = sample => {
+  console.log(sample)
+  Papa.parse("/sample_datasets/bitcoin-volume.csv", {
+    header: true,
+    download: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      // pass results
+      app.Data = results;
+      console.log(results)
+      let target = [], date = [];
+
+      app.Data.data.forEach((element, index) => {
+        target.push(element["coinbase"])
+        date.push(element["Time"])
+      });
+    
+      date = date.map(d => d.replace(' UTC', ''));
+      
+      const GRAPH = document.getElementById('graph-extracted');
+      Plotly.purge(GRAPH);
+      Plotly.plot(GRAPH, [{
+        x: date,
+        y: target,
+        type: 'scatter'
+      }], {
+        responsive: true,
+      });
+    }
+  });
+
+  
+} 
+
 $("#extract-data").click(
   function () {
-    console.log("g")
-    let target = [],
-      date = [];
+    let target = [], date = [];
 
     app.Data.data.forEach((element, index) => {
       target.push(element[$("#select-data").val()])
       date.push(element[$("#select-time").val()])
     });
-    console.log(date);
 
     date = date.map(d => d.replace(' UTC', ''));
-    console.log(date)
 
     const GRAPH = document.getElementById('graph-extracted');
     Plotly.purge(GRAPH);
