@@ -39,6 +39,6 @@
     "babelify": "^10.0.0",
     "budo": "^11.6.2",
     "clang-format": "^1.2.4",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   }
 }
